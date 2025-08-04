@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "95691715198",
+    "project_id": "dogageplus",
+    "storage_bucket": "dogageplus.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95691715198:android:69ae0a4e8fab7608f75e2f",
+        "android_client_info": {
+          "package_name": "com.example.dog_age_plus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdxX1zPUVwARLLpmPHGogTokYYALnt18E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
