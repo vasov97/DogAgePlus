@@ -54,7 +54,7 @@ flutter:
 
   assets:
     - assets/
-    - assets/fonts
+    - assets/images/
   fonts:
     - family: Montserrat
       fonts:

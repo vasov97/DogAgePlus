@@ -1,28 +1,45 @@
+import 'package:dog_age_plus/base/theme/app_colors.dart';
+import 'package:dog_age_plus/base/theme/app_typography.dart';
 import 'package:flutter/material.dart';
 
 extension SnackbarExtensions on BuildContext {
   void showSnackBar(
     String message, {
-    Color backgroundColor = Colors.black87,
+    Color backgroundColor = AppColors.textPrimary,
     Duration duration = const Duration(seconds: 2),
     SnackBarAction? action,
   }) {
-    ScaffoldMessenger.of(this).hideCurrentSnackBar();
-    ScaffoldMessenger.of(this).showSnackBar(
+    final messenger = ScaffoldMessenger.of(this);
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
       SnackBar(
-        content: Text(message),
+        behavior: SnackBarBehavior.floating,
         backgroundColor: backgroundColor,
         duration: duration,
-        action: action,
+        content: Text(
+          message,
+          style: AppTypography.body2.copyWith(color: AppColors.textLight),
+        ),
+        action:
+            action ??
+            SnackBarAction(
+              label: 'OK',
+              textColor: AppColors.accent,
+              onPressed: () {},
+            ),
       ),
     );
   }
 
   void showSuccessSnackBar(String message) {
-    showSnackBar(message, backgroundColor: Colors.green);
+    showSnackBar(message, backgroundColor: AppColors.success);
   }
 
   void showErrorSnackBar(String message) {
-    showSnackBar(message, backgroundColor: Colors.red);
+    showSnackBar(message, backgroundColor: AppColors.error);
+  }
+
+  void showInfoSnackBar(String message) {
+    showSnackBar(message, backgroundColor: AppColors.primary);
   }
 }
