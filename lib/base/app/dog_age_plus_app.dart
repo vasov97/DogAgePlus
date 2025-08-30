@@ -1,3 +1,4 @@
+import 'package:dog_age_plus/base/theme/app_colors.dart';
 import 'package:dog_age_plus/features/auth/screens/login_screen.dart';
 import 'package:dog_age_plus/features/auth/screens/signup_screen.dart';
 import 'package:dog_age_plus/features/onboarding/screens/onboarding_screen.dart';
@@ -12,9 +13,7 @@ class DogAgePlusApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'DogAgePlus',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 11, 114, 15),
-        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
       ),
       home: const OnboardingScreen(),
       initialRoute: '/onboarding',

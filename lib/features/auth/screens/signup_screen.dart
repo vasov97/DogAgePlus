@@ -1,15 +1,14 @@
+import 'dart:ui';
+
 import 'package:dog_age_plus/base/common_widgets/app_scaffold.dart';
-import 'package:dog_age_plus/base/common_widgets/app_text_field.dart';
-import 'package:dog_age_plus/base/common_widgets/primary_button.dart';
 import 'package:dog_age_plus/base/extensions/snackbar.dart';
 import 'package:dog_age_plus/base/theme/app_colors.dart';
 import 'package:dog_age_plus/base/theme/app_typography.dart';
-import 'package:dog_age_plus/features/auth/widgets/social_auth_row.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
-
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
@@ -21,6 +20,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _confirmPassword = TextEditingController();
   bool _loading = false;
   bool _agree = false;
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _email.dispose();
+    _password.dispose();
+    _confirmPassword.dispose();
+    super.dispose();
+  }
 
   Future<void> _onSignUp() async {
     if (_name.text.trim().isEmpty) {
@@ -39,78 +47,97 @@ class _SignUpScreenState extends State<SignUpScreen> {
       context.showErrorSnackBar('Please accept Terms to continue');
       return;
     }
-
     setState(() => _loading = true);
-    try {
-      await Future.delayed(
-        const Duration(milliseconds: 900),
-      ); // TODO: call signup API/Firebase
-      if (!mounted) return;
-      context.showSuccessSnackBar('Account created!');
-      Navigator.pushReplacementNamed(context, '/dashboard');
-    } finally {
-      if (mounted) setState(() => _loading = false);
-    }
+    await Future.delayed(const Duration(milliseconds: 900));
+    if (!mounted) return;
+    setState(() => _loading = false);
+    context.showSuccessSnackBar('Account created!');
+    Navigator.pushReplacementNamed(context, '/dashboard');
   }
 
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      backgroundColor: AppColors.background,
-      titleWidget: const SizedBox.shrink(),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/background.png'),
-            fit: BoxFit.cover,
-            opacity: 0.08,
-          ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 480),
-              child: Card(
-                color: AppColors.surface,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+      body: Stack(
+        children: [
+          const _GradientBackdrop(),
+          SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 24,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 460),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Image.asset('assets/logo.png', height: 72),
-                      const SizedBox(height: 24),
-                      AppTextField(
-                        controller: _name,
-                        hint: 'Full name',
-                        keyboardType: TextInputType.name,
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.asset(
+                          'assets/logo.png',
+                          width: 88,
+                          height: 88,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      const SizedBox(height: 28),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0x1A000000),
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            _CupertinoField(
+                              controller: _name,
+                              placeholder: 'Full name',
+                              keyboardType: TextInputType.name,
+                            ),
+                            const Divider(
+                              height: 1,
+                              thickness: 1,
+                              color: Color(0xFFE5E5EA),
+                            ),
+                            _CupertinoField(
+                              controller: _email,
+                              placeholder: 'Email address',
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            const Divider(
+                              height: 1,
+                              thickness: 1,
+                              color: Color(0xFFE5E5EA),
+                            ),
+                            _CupertinoField(
+                              controller: _password,
+                              placeholder: 'Password',
+                              obscureText: true,
+                            ),
+                            const Divider(
+                              height: 1,
+                              thickness: 1,
+                              color: Color(0xFFE5E5EA),
+                            ),
+                            _CupertinoField(
+                              controller: _confirmPassword,
+                              placeholder: 'Confirm password',
+                              obscureText: true,
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 12),
-                      AppTextField(
-                        controller: _email,
-                        hint: 'Email',
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                      const SizedBox(height: 12),
-                      AppTextField(
-                        controller: _password,
-                        hint: 'Password',
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
-                      ),
-                      const SizedBox(height: 12),
-                      AppTextField(
-                        controller: _confirmPassword,
-                        hint: 'Confirm password',
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
-                      ),
-                      const SizedBox(height: 8),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Checkbox(
                             value: _agree,
@@ -125,6 +152,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   'I agree to the ',
                                   style: AppTypography.body2.copyWith(
                                     color: AppColors.textSecondary,
+                                    letterSpacing: 1.2,
                                   ),
                                 ),
                                 GestureDetector(
@@ -135,6 +163,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     style: AppTypography.body2.copyWith(
                                       color: AppColors.primary,
                                       fontWeight: FontWeight.w600,
+                                      letterSpacing: 1.2,
                                     ),
                                   ),
                                 ),
@@ -144,33 +173,100 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ],
                       ),
                       const SizedBox(height: 4),
-                      PrimaryButton(
-                        text: _loading ? 'Creating account…' : 'Sign Up',
-                        onPressed: () {
-                          if (_loading) return;
-                          _onSignUp();
-                        },
+                      _OutlinedCupertinoButton(
+                        backgroundColor: AppColors.primary,
+                        borderColor: AppColors.primary,
+                        radius: 12,
+                        onPressed: _loading ? null : _onSignUp,
+                        child: Text(
+                          'Sign Up',
+                          style: AppTypography.button.copyWith(
+                            color: Colors.white,
+                            fontSize: 18,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      const SocialAuthRow(),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 12),
+                      _OutlinedCupertinoButton(
+                        backgroundColor: Colors.white,
+                        borderColor: const Color(0xFFE5E5EA),
+                        radius: 12,
+                        onPressed: _loading ? null : () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(width: 8),
+                            Image.asset(
+                              'assets/google.png',
+                              height: 18,
+                              width: 18,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              'Sign up with Google',
+                              style: AppTypography.button.copyWith(
+                                color: Colors.black87,
+                                fontSize: 18,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      _OutlinedCupertinoButton(
+                        backgroundColor: Colors.black,
+                        borderColor: Colors.black,
+                        radius: 12,
+                        onPressed: _loading ? null : () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.apple,
+                              color: Colors.white,
+                              size: 22,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              'Sign up with Apple',
+                              style: AppTypography.button.copyWith(
+                                color: Colors.white,
+                                fontSize: 18,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 18),
                       TextButton(
-                        onPressed: () =>
-                            Navigator.pushReplacementNamed(context, '/login'),
+                        onPressed: _loading
+                            ? null
+                            : () => Navigator.pushReplacementNamed(
+                                context,
+                                '/login',
+                              ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               'Already have an account?',
-                              style: AppTypography.body2.copyWith(
-                                color: AppColors.textSecondary,
+                              style: AppTypography.subtitle2.copyWith(
+                                color: CupertinoColors.systemGrey,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20,
+                                letterSpacing: 1.2,
                               ),
                             ),
                             Text(
                               ' Log in',
-                              style: AppTypography.body2.copyWith(
-                                color: AppColors.primary,
+                              style: AppTypography.subtitle2.copyWith(
+                                color: CupertinoColors.activeBlue,
                                 fontWeight: FontWeight.w600,
+                                fontSize: 20,
+                                letterSpacing: 1.2,
                               ),
                             ),
                           ],
@@ -180,6 +276,139 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GradientBackdrop extends StatelessWidget {
+  const _GradientBackdrop();
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        const ColoredBox(color: Colors.white),
+        Positioned(
+          top: -90,
+          left: -90,
+          child: Container(
+            width: 320,
+            height: 320,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                colors: [Color(0x33FF9F0A), Colors.transparent],
+                stops: [0.0, 1.0],
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          top: -90,
+          right: -90,
+          child: Container(
+            width: 320,
+            height: 320,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                colors: [Color(0x33007AFF), Colors.transparent],
+                stops: [0.0, 1.0],
+              ),
+            ),
+          ),
+        ),
+        BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+          child: const SizedBox.expand(),
+        ),
+      ],
+    );
+  }
+}
+
+class _CupertinoField extends StatelessWidget {
+  final TextEditingController controller;
+  final String placeholder;
+  final TextInputType? keyboardType;
+  final bool obscureText;
+
+  const _CupertinoField({
+    required this.controller,
+    required this.placeholder,
+    this.keyboardType,
+    this.obscureText = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      keyboardType: keyboardType,
+      obscureText: obscureText,
+      style: AppTypography.body1.copyWith(color: AppColors.textPrimary),
+      decoration: InputDecoration(
+        hintText: placeholder,
+        border: InputBorder.none,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
+        hintStyle: AppTypography.body1.copyWith(color: const Color(0x3C3C434D)),
+      ),
+    );
+  }
+}
+
+class _OutlinedCupertinoButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final Color backgroundColor;
+  final Color borderColor;
+  final double radius;
+  final Widget child;
+
+  const _OutlinedCupertinoButton({
+    required this.onPressed,
+    required this.child,
+    required this.backgroundColor,
+    required this.borderColor,
+    this.radius = 12,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 44,
+      width: double.infinity,
+      child: Material(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(radius),
+        elevation: 0,
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(radius),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(radius),
+              border: Border.all(color: borderColor),
+              boxShadow: backgroundColor != Colors.white
+                  ? [
+                      const BoxShadow(
+                        color: Color(0x1A000000),
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
+                      ),
+                    ]
+                  : const [],
+            ),
+            alignment: Alignment.center,
+            child: DefaultTextStyle.merge(
+              style: AppTypography.button.copyWith(height: 1.2),
+              child: child,
             ),
           ),
         ),

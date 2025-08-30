@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primary = Color.fromARGB(255, 11, 114, 15);
-  static const Color primaryLight = Color.fromARGB(255, 34, 153, 39);
-  static const Color primaryDark = Color.fromARGB(255, 6, 85, 10);
+  static const Color primary = Color(0xFF30D158);
+  //Color.fromARGB(255, 11, 114, 15);
+  // static const Color primaryLight = Color.fromARGB(255, 34, 153, 39);
+  // static const Color primaryDark = Color.fromARGB(255, 6, 85, 10);
+  static const Color primaryLight = Color(0xFF63E07D); // lighter green tint
+  static const Color primaryDark = Color(0xFF1E9240); // deeper green
 
   static const Color secondary = Color(0xFF388E3C);
   static const Color accent = Color(0xFFFFC107);

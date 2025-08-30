@@ -19,7 +19,10 @@ class PrimaryButton extends StatelessWidget {
       onPressed: onPressed,
       child: Text(
         text,
-        style: AppTypography.button.copyWith(color: AppColors.textLight),
+        style: AppTypography.button.copyWith(
+          color: AppColors.textLight,
+          letterSpacing: 1.2,
+        ),
       ),
     );
   }

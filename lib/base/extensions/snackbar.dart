@@ -18,7 +18,10 @@ extension SnackbarExtensions on BuildContext {
         duration: duration,
         content: Text(
           message,
-          style: AppTypography.body2.copyWith(color: AppColors.textLight),
+          style: AppTypography.body2.copyWith(
+            color: AppColors.textLight,
+            letterSpacing: 1.2,
+          ),
         ),
         action:
             action ??

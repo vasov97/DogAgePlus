@@ -39,7 +39,7 @@ class IntroScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: AppTypography.headline2,
+                  style: AppTypography.headline2.copyWith(letterSpacing: 1.2),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
@@ -47,6 +47,7 @@ class IntroScreen extends StatelessWidget {
                   description,
                   style: AppTypography.body1.copyWith(
                     color: AppColors.textSecondary,
+                    letterSpacing: 1.2,
                   ),
                   textAlign: TextAlign.center,
                 ),

@@ -18,19 +18,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       'title': 'Your Dog Deserves a Long, Healthy Life',
       'desc':
           'We help you track what really matters — their well-being, every day.',
-      'img': 'assets/images/onboarding1.png',
+      'img': 'assets/images/onboarding11.png',
     },
     {
       'title': 'AI-Powered Health Insights',
       'desc':
           'DogAgePlus calculates biological age based on behavior, activity, and care.',
-      'img': 'assets/images/onboarding2.png',
+      'img': 'assets/images/onboarding22.png',
     },
     {
       'title': 'You + Dog = Healthy Team',
       'desc':
           'Daily journaling, care tasks, and smart reminders keep both of you on track.',
-      'img': 'assets/images/onboarding3.png',
+      'img': 'assets/images/onboarding33.png',
     },
   ];
 
@@ -48,36 +48,40 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Column(
-          children: [
-            Expanded(
-              child: PageView.builder(
-                controller: _controller,
-                itemCount: _pages.length,
-                onPageChanged: (index) => setState(() => _currentPage = index),
-                itemBuilder: (context, index) {
-                  final page = _pages[index];
-                  return IntroScreen(
-                    title: page['title']!,
-                    description: page['desc']!,
-                    imagePath: page['img']!,
-                  );
-                },
+    return PopScope(
+      canPop: false,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Column(
+            children: [
+              Expanded(
+                child: PageView.builder(
+                  controller: _controller,
+                  itemCount: _pages.length,
+                  onPageChanged: (index) =>
+                      setState(() => _currentPage = index),
+                  itemBuilder: (context, index) {
+                    final page = _pages[index];
+                    return IntroScreen(
+                      title: page['title']!,
+                      description: page['desc']!,
+                      imagePath: page['img']!,
+                    );
+                  },
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 40, top: 8),
-              child: PrimaryButton(
-                text: _currentPage == _pages.length - 1
-                    ? 'Get Started'
-                    : 'Next',
-                onPressed: _nextPage,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 40, top: 8),
+                child: PrimaryButton(
+                  text: _currentPage == _pages.length - 1
+                      ? 'Get Started'
+                      : 'Next',
+                  onPressed: _nextPage,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

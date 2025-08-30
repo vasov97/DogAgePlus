@@ -1,7 +1,7 @@
-import 'package:dog_age_plus/base/common_widgets/app_text_field.dart';
 import 'package:dog_age_plus/base/common_widgets/primary_button.dart';
 import 'package:dog_age_plus/base/theme/app_colors.dart';
 import 'package:dog_age_plus/base/theme/app_typography.dart';
+import 'package:dog_age_plus/features/auth/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordDialog extends StatefulWidget {
@@ -61,11 +61,12 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
               ),
             ),
             const SizedBox(height: 12),
-            AppTextField(
+            CupertinoField(
               controller: _emailCtrl,
-              hint: 'Email',
+              placeholder: 'Email address',
               keyboardType: TextInputType.emailAddress,
             ),
+            const Divider(height: 1, thickness: 1, color: Color(0xFFE5E5EA)),
           ],
         ),
       ),
